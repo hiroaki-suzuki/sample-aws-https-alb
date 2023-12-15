@@ -78,17 +78,6 @@ export class LoadBalancer extends Construct {
   }
 
   private addFrontEcsTargetGroup(alb: ApplicationLoadBalancer, frontEcsService: FargateService) {
-    const frontListener = alb.addListener(`${namePrefix}-listener`, {
-      port: 80,
-    })
-
-    const targetGroupName = `${namePrefix}-front-ecs-tg`
-    frontListener.addTargets(targetGroupName, {
-      targetGroupName: targetGroupName,
-      port: 80,
-      targets: [frontEcsService],
-    })
-
     const frontListenerHttps = alb.addListener(`${namePrefix}-ecs-listener`, {
       port: 443,
       certificates: [
