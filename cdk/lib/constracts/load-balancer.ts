@@ -88,5 +88,21 @@ export class LoadBalancer extends Construct {
       port: 80,
       targets: [frontEcsService],
     })
+
+    const frontListenerHttps = alb.addListener(`${namePrefix}-ecs-listener`, {
+      port: 443,
+      certificates: [
+        {
+          certificateArn: process.env.ACM_CERTIFICATE_ARM as string,
+        },
+      ],
+    })
+
+    const targetGroupNameHttps = `${namePrefix}-ecs-tg`
+    frontListenerHttps.addTargets(targetGroupNameHttps, {
+      targetGroupName: targetGroupNameHttps,
+      port: 80,
+      targets: [frontEcsService],
+    })
   }
 }
